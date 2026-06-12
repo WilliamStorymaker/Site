@@ -19,7 +19,7 @@
             color: #ffffff;
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
-            padding-top: 60px; /* Dá espaço para o menu fixo no topo */
+            padding-top: 60px;
         }
 
         .highlight {
@@ -28,13 +28,13 @@
 
         /* Menu de Navegação Fixo */
         .navbar {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             background-color: #161616;
             border-bottom: 1px solid #222222;
-            display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
@@ -51,6 +51,7 @@
         .nav-menu {
             display: flex;
             gap: 15px;
+            align-items: center;
         }
 
         .nav-menu a {
@@ -63,6 +64,22 @@
 
         .nav-menu a:hover {
             color: #d4ad4b;
+        }
+
+        .btn-logout {
+            background: none;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: rgba(255, 68, 68, 0.1);
         }
 
         /* Cabeçalho Principal */
@@ -88,11 +105,15 @@
         }
 
         /* Seções */
+        .app-content {
+            display: none;
+        }
+
         section {
             padding: 25px 20px;
             max-width: 500px;
             margin: 0 auto;
-            scroll-margin-top: 70px; /* Evita que o menu tampe o título ao rolar */
+            scroll-margin-top: 70px;
         }
 
         section h2 {
@@ -101,6 +122,29 @@
             text-align: center;
             margin-bottom: 20px;
             font-weight: 600;
+        }
+
+        /* Seção do Login com Foto */
+        .login-section {
+            display: block;
+            padding: 40px 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-avatar-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #d4ad4b;
+            object-fit: cover;
+            background-color: #161616;
+            box-shadow: 0 4px 15px rgba(212, 173, 75, 0.2);
         }
 
         /* Form / Containers */
@@ -225,39 +269,59 @@
 </head>
 <body>
 
-    <nav class="navbar">
+    <nav class="navbar" id="appNavbar">
         <div class="nav-logo">STORYFLOW</div>
         <div class="nav-menu">
             <a href="#form">＋ Agendar</a>
             <a href="#cronograma">📅 Cronograma</a>
+            <button onclick="fazerLogout()" class="btn-logout">Sair</button>
         </div>
     </nav>
 
-    <header class="hero">
-        <h1>Painel de <span class="highlight">Agendamentos</span></h1>
-        <p>Sua central privada para organizar locais, datas e produções.</p>
-    </header>
-
-    <section id="form">
-        <h2>Agendar Nova Gravação</h2>
+    <section class="login-section" id="telaLogin">
+        <div class="login-avatar-container">
+            <img src="logo.png" alt="Logo" class="login-avatar" onerror="this.src='https://via.placeholder.com/100/161616/d4ad4b?text=SF'">
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <span style="font-size: 1.5rem; font-weight: 700; color: #d4ad4b; letter-spacing: 2px;">STORYFLOW</span>
+            <p style="color: #666; font-size: 0.85rem; margin-top: 5px;">Acesse sua central de agendamentos</p>
+        </div>
+        
         <div class="form-container">
-            <input type="text" id="titulo" placeholder="Nome do Cliente / Gravação">
-            <input type="text" id="telefone" placeholder="WhatsApp do Cliente">
-            <input type="text" id="local" placeholder="Local da Gravação">
-            <div class="form-row">
-                <input type="date" id="data">
-                <input type="time" id="hora">
-            </div>
-            <button onclick="adicionarAgenda()" class="btn-primary">Salvar na Agenda</button>
+            <input type="text" id="loginUsuario" placeholder="Usuário">
+            <input type="password" id="loginSenha" placeholder="Senha">
+            <button onclick="verificarLogin()" class="btn-primary" style="margin-top: 5px;">Entrar no Sistema</button>
         </div>
     </section>
 
-    <section id="cronograma">
-        <h2>Cronograma de Produções</h2>
-        <div id="listaAgenda" class="list-container">
+    <div class="app-content" id="conteudoProtegido">
+        <header class="hero">
+            <h1>Painel de <span class="highlight">Agendamentos</span></h1>
+            <p>Sua central privada para organizar locais, datas e produções.</p>
+        </header>
+
+        <section id="form">
+            <h2>Agendar Nova Gravação</h2>
+            <div class="form-container">
+                <input type="text" id="titulo" placeholder="Nome do Cliente / Gravação">
+                <input type="text" id="telefone" placeholder="WhatsApp do Cliente">
+                <input type="text" id="local" placeholder="Local da Gravação">
+                <div class="form-row">
+                    <input type="date" id="data">
+                    <input type="time" id="hora">
+                </div>
+                <button onclick="adicionarAgenda()" class="btn-primary">Salvar na Agenda</button>
             </div>
-        <button onclick="limparTodaAgenda()" class="btn-danger">Limpar Toda a Agenda</button>
-    </section>
+        </section>
+
+        <section id="cronograma">
+            <h2>Cronograma de Produções</h2>
+            <div id="listaAgenda" class="list-container">
+                </div>
+            <button onclick="limparTodaAgenda()" class="btn-danger">Limpar Toda a Agenda</button>
+        </section>
+    </div>
 
     <footer>
         <p>&copy; 2026 StoryFlow - Gestão Profissional de Conteúdo</p>
@@ -266,9 +330,28 @@
     <script>
         let agenda = JSON.parse(localStorage.getItem('minha_agenda')) || [];
 
-        document.addEventListener("DOMContentLoaded", function() {
-            mostrarAgenda();
-        });
+        function verificarLogin() {
+            const usuarioInput = document.getElementById('loginUsuario').value;
+            const senhaInput = document.getElementById('loginSenha').value;
+
+            if (usuarioInput === 'admin' && senhaInput === 'admin123') {
+                document.getElementById('telaLogin').style.display = 'none';
+                document.getElementById('appNavbar').style.display = 'flex';
+                document.getElementById('conteudoProtegido').style.display = 'block';
+                mostrarAgenda();
+            } else {
+                alert('Usuário ou senha incorretos!');
+            }
+        }
+
+        function fazerLogout() {
+            document.getElementById('loginUsuario').value = '';
+            document.getElementById('loginSenha').value = '';
+            
+            document.getElementById('appNavbar').style.display = 'none';
+            document.getElementById('conteudoProtegido').style.display = 'none';
+            document.getElementById('telaLogin').style.display = 'block';
+        }
 
         function adicionarAgenda() {
             const titulo = document.getElementById('titulo').value;
